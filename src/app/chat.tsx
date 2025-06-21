@@ -50,12 +50,7 @@ export function Chat() {
          },
          body: JSON.stringify({
             model: 'google/gemini-2.0-flash-001',
-            messages: [{ 
-               role: 'system', 
-               content: SYSTEM_PROMPT + messages.map(m => {
-                  return `${m.role === 'user' ? 'Assistant' : 'User'}: ${m.content}`;
-               }).join('\n')
-            }],
+            messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
          }),
       });
 
@@ -112,12 +107,12 @@ export function Chat() {
          <LlmInput onSubmit={sendMessage} showCursor={!generating} />
 
          {showScrollButton && (
-            <button
-               onClick={scrollToBottom}
-               className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-black-700 transition"
-            >
-               ⬇ 
-            </button>
+         <button
+            onClick={scrollToBottom}
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white text-black px-4 py-2 rounded-full shadow-lg hover:bg-gray-200 transition"
+>
+            👇
+         </button>
          )}
       </div>
    );
