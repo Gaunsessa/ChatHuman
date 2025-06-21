@@ -3,9 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { UserText } from "./userText";
-
 import { SYSTEM_PROMPT } from "./systemPrompt";
-
 import { LlmText } from "./llmText";
 import { LlmInput } from "./llmInput";
 
@@ -29,13 +27,18 @@ function Message({ message }: { message: message }) {
 
 export function Chat() {
    const [generating, setGenerating] = useState(false);
-
    const [messages, setMessages] = useState([] as message[]);
+   const [showScrollButton, setShowScrollButton] = useState(false);
+
    const inputRef = useRef(null);
+   const bottomRef = useRef<HTMLDivElement>(null);
+
+   function scrollToBottom() {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+   }
 
    async function updateState() {
-      if (generating)
-         return;
+      if (generating) return;
 
       setGenerating(true);
 
@@ -53,7 +56,6 @@ export function Chat() {
                   return `${m.role === 'user' ? 'Assistant' : 'User'}: ${m.content}`;
                }).join('\n')
             }],
-            // }, ...messages],
          }),
       });
 
@@ -68,39 +70,55 @@ export function Chat() {
    }
 
    function sendMessage(text: string) {
-      if (generating)
-         return false;
+      if (generating) return false;
 
-      setMessages(prev => {
-         const res = [
-            ...prev,
-            { role: 'user', content: text }
-         ];
-
-         return res as any;
-      });
+      setMessages(prev => [
+         ...prev,
+         { role: 'user', content: text }
+      ]);
 
       return true;
    }
 
    useEffect(() => {
-      if (messages.at(-1)?.role !== 'assistant')
+      if (messages.at(-1)?.role !== 'assistant') {
          updateState();
+      }
 
-      window.scrollTo({
-         top: document.body.scrollHeight,
-         left: 0,
-         behavior: "smooth",
-      });
+      scrollToBottom();
    }, [messages]);
 
+   
+   useEffect(() => {
+      function handleScroll() {
+         const threshold = 150;
+         const distanceFromBottom = document.documentElement.scrollHeight - window.innerHeight - window.scrollY;
+
+         setShowScrollButton(distanceFromBottom > threshold);
+      }
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+   }, []);
+
    return (
-      <div className="flex-1 justify-end">
-         {messages.map((message: any, index: number) => (
+      <div className="flex-1 justify-end relative">
+         {messages.map((message, index) => (
             <Message key={index} message={message} />
          ))}
 
+         <div ref={bottomRef}></div>
+
          <LlmInput onSubmit={sendMessage} showCursor={!generating} />
+
+         {showScrollButton && (
+            <button
+               onClick={scrollToBottom}
+               className="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-black-700 transition"
+            >
+               ⬇ 
+            </button>
+         )}
       </div>
    );
 }
