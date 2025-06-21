@@ -2,17 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { UserText } from "./userText";
-import { SYSTEM_PROMPT } from "./systemPrompt";
-import { LlmText } from "./llmText";
+import { UserText, LlmText } from "./chatText";
 import { LlmInput } from "./llmInput";
 
-type message = {
-   role: 'user' | 'assistant' | 'system';
-   content: string;
-};
+import { Message, requestCompletion } from "./llm";
 
-function Message({ message }: { message: message }) {
+function MessageBox({ message }: { message: Message }) {
    switch (message.role) {
       case 'assistant':
          return <UserText text={message.content} />;
@@ -25,15 +20,11 @@ function Message({ message }: { message: message }) {
    }
 }
 
-export function Chat() {
+export function Chat({ angryAction, happyAction }: { angryAction: () => void, happyAction: () => void }) {
    const [generating, setGenerating] = useState(false);
-   const [messages, setMessages] = useState([] as message[]);
+   const [messages, setMessages] = useState([] as Message[]);
 
    const [showScrollButton, setShowScrollButton] = useState(false);
-
-   const chatWrapperRef = useRef<HTMLDivElement>(null);
-
-   const canShake = useRef(true);
 
    function scrollToBottom() {
       window.scrollTo({
@@ -43,58 +34,22 @@ export function Chat() {
       });
    }
 
-   function triggerShake() {
-      const el = chatWrapperRef.current;
-      if (!el || !canShake.current) return;
-
-      canShake.current = false;
-
-      el.classList.add("shake");
-
-      const handleAnimationEnd = () => {
-         el.classList.remove("shake");
-         canShake.current = true;
-         el.removeEventListener("animationend", handleAnimationEnd);
-      };
-
-      el.addEventListener("animationend", handleAnimationEnd);
-   }
-
    async function updateState() {
       if (generating) return;
 
       setGenerating(true);
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-         method: 'POST',
-         headers: {
-            Authorization: `Bearer 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`,
-            'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({
-            model: 'google/gemini-2.0-flash-001',
-            messages: [{ 
-               role: 'system', 
-               content: SYSTEM_PROMPT + messages.map(m => {
-                  return `${m.role === 'user' ? 'Assistant' : 'You'}: ${m.content}`;
-               }).join('\n')
-            }],
-         }),
-      });
+      const newMessages = await requestCompletion(messages);
 
-      const data = await response.json();
+      setMessages(newMessages);
 
-      setMessages(prev => ([
-         ...prev,
-         { role: 'assistant', content: data.choices[0].message.content }
-      ]));
+      const lastMessage = newMessages.at(-1);
 
-      const lastMessage = data.choices[0].message.content;
-      const uppecasePercent = (lastMessage?.match(/[A-Z]/g)?.length ?? 0) / (lastMessage?.length ?? 1) * 100;
-      console.log(uppecasePercent);
+      if (lastMessage?.happy)
+         happyAction();
 
-      if (uppecasePercent > 50)
-         triggerShake(); 
+      if (lastMessage?.angry)
+         angryAction(); 
 
       setGenerating(false);
    }
@@ -131,10 +86,10 @@ export function Chat() {
    }, []);
 
    return (
-      <div ref={chatWrapperRef} className="flex-1 justify-end relative">
+      <div className="flex-1 justify-end relative">
 
          {messages.map((message, index) => (
-            <Message key={index} message={message} />
+            <MessageBox key={index} message={message} />
          ))}
 
          <LlmInput onSubmit={sendMessage} showCursor={!generating} />

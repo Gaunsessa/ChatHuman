@@ -41,5 +41,4 @@ export function LlmInput({
          <span className={`text-black ${showCursor ? 'animate-pulse' : 'opacity-0'}`}>|</span>
       </p>
    </div>
-
 }
