@@ -1,4 +1,3 @@
-
 export function UserText({ text }: { text: string }) {
   return (
     <div className="flex justify-end">

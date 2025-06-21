@@ -49,8 +49,11 @@ export function Chat() {
             model: 'google/gemini-2.0-flash-001',
             messages: [{ 
                role: 'system', 
-               content: SYSTEM_PROMPT,
-            }, ...messages],
+               content: SYSTEM_PROMPT + messages.map(m => {
+                  return `${m.role === 'user' ? 'Assistant' : 'User'}: ${m.content}`;
+               }).join('\n')
+            }],
+            // }, ...messages],
          }),
       });
 
