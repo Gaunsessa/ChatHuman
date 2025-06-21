@@ -2,11 +2,13 @@
 
 import 'server-only';
 
-import { SYSTEM_PROMPT } from "./systemPrompt";
+import { ANGRY_TOKEN, HAPPY_TOKEN, SYSTEM_PROMPT } from "./systemPrompt";
 
 export type Message = {
    role: 'user' | 'assistant' | 'system';
    content: string;
+   happy?: boolean;
+   angry?: boolean;
 };
 
 export async function requestCompletion(messages: Message[]): Promise<Message[]> {
@@ -27,10 +29,16 @@ export async function requestCompletion(messages: Message[]): Promise<Message[]>
       }),
    });
 
-   const data = await response.json();
+   let data = await response.json();
+   data = data.choices[0].message.content;
 
    return [
       ...messages,
-      { role: 'assistant', content: data.choices[0].message.content }
+      { 
+         role: 'assistant', 
+         content: data.replace(HAPPY_TOKEN, '').replace(ANGRY_TOKEN, ''), 
+         happy: data.includes(HAPPY_TOKEN),
+         angry: data.includes(ANGRY_TOKEN),
+      }
    ];
 }

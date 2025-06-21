@@ -20,15 +20,11 @@ function MessageBox({ message }: { message: Message }) {
    }
 }
 
-export function Chat() {
+export function Chat({ angryAction, happyAction }: { angryAction: () => void, happyAction: () => void }) {
    const [generating, setGenerating] = useState(false);
    const [messages, setMessages] = useState([] as Message[]);
 
    const [showScrollButton, setShowScrollButton] = useState(false);
-
-   const chatWrapperRef = useRef<HTMLDivElement>(null);
-
-   const canShake = useRef(true);
 
    function scrollToBottom() {
       window.scrollTo({
@@ -36,23 +32,6 @@ export function Chat() {
          left: 0,
          behavior: 'smooth'
       });
-   }
-
-   function triggerShake() {
-      const el = chatWrapperRef.current;
-      if (!el || !canShake.current) return;
-
-      canShake.current = false;
-
-      el.classList.add("shake");
-
-      const handleAnimationEnd = () => {
-         el.classList.remove("shake");
-         canShake.current = true;
-         el.removeEventListener("animationend", handleAnimationEnd);
-      };
-
-      el.addEventListener("animationend", handleAnimationEnd);
    }
 
    async function updateState() {
@@ -64,11 +43,13 @@ export function Chat() {
 
       setMessages(newMessages);
 
-      const lastMessage = newMessages.at(-1)?.content;
-      const uppecasePercent = (lastMessage?.match(/[A-Z]/g)?.length ?? 0) / (lastMessage?.length ?? 1) * 100;
+      const lastMessage = newMessages.at(-1);
 
-      if (uppecasePercent > 50)
-         triggerShake(); 
+      if (lastMessage?.happy)
+         happyAction();
+
+      if (lastMessage?.angry)
+         angryAction(); 
 
       setGenerating(false);
    }
@@ -105,7 +86,7 @@ export function Chat() {
    }, []);
 
    return (
-      <div ref={chatWrapperRef} className="flex-1 justify-end relative">
+      <div className="flex-1 justify-end relative">
 
          {messages.map((message, index) => (
             <MessageBox key={index} message={message} />
