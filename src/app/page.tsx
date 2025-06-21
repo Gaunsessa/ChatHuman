@@ -1,14 +1,29 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Chat } from './chat';
 
 export default function Home() {
+  const [wrongCount, setWrongCount] = useState(1);
+  const [showExplosion, setShowExplosion] = useState(false);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const canShake = useRef(true);
 
   function shakeAction() {
+    setWrongCount(prev => {
+        const updated = prev + 1;
+
+        if (updated % 4 == 0) {
+          setShowExplosion(true);
+          setTimeout(() => setShowExplosion(false), 4000);
+          return 0;
+        }
+
+        return updated;
+    });
+
     const el = wrapperRef.current;
     if (!el || !canShake.current) return;
 
@@ -50,6 +65,16 @@ export default function Home() {
         </div>
         <Chat happyAction={acceptAction} angryAction={shakeAction}/>
       </div>
+
+      {showExplosion && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+               <img
+                  src="/trump.gif"
+                  alt="Explosion"
+                  className="w-140 h-auto rounded-xl shadow-2xl"
+               />
+            </div>
+         )}
     </div>
   );
 }
