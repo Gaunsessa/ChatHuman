@@ -28,10 +28,17 @@ function Message({ message }: { message: message }) {
 }
 
 export function Chat() {
+   const [generating, setGenerating] = useState(false);
+
    const [messages, setMessages] = useState([] as message[]);
    const inputRef = useRef(null);
 
    async function updateState() {
+      if (generating)
+         return;
+
+      setGenerating(true);
+
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
          method: 'POST',
          headers: {
@@ -54,14 +61,11 @@ export function Chat() {
          { role: 'assistant', content: data.choices[0].message.content }
       ]));
 
-      // // Scroll to the bottom of the chat
-      // if (inputRef.current) {
-      //    inputRef.current.scrollIntoView({ behavior: 'smooth' });
-      // }
+      setGenerating(false);
    }
 
    function sendMessage(text: string) {
-      if (messages.at(-1)?.role === 'user')
+      if (generating)
          return false;
 
       setMessages(prev => {
@@ -80,6 +84,11 @@ export function Chat() {
       if (messages.at(-1)?.role !== 'assistant')
          updateState();
 
+      window.scrollTo({
+         top: document.body.scrollHeight,
+         left: 0,
+         behavior: "smooth",
+      });
    }, [messages]);
 
    return (
@@ -87,7 +96,8 @@ export function Chat() {
          {messages.map((message: any, index: number) => (
             <Message key={index} message={message} />
          ))}
-         <LlmInput onSubmit={sendMessage} />
+
+         <LlmInput onSubmit={sendMessage} showCursor={!generating} ref={inputRef} />
       </div>
    );
 }

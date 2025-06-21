@@ -3,8 +3,11 @@ import { LlmText } from "./llmText";
 
 export function LlmInput({
    onSubmit,
+   showCursor,
+   ref
 }: {
    onSubmit: (text: string) => boolean;
+   showCursor: boolean;
 }) {
    const [text, setText] = useState('');
    const textRef = useRef(text);
@@ -15,7 +18,7 @@ export function LlmInput({
 
    useEffect(() => {
       function handleKeyDown(event: KeyboardEvent) {
-         console.log(event.key);
+         if (!showCursor) return;
 
          if (event.key === 'Enter') {
             console.log(textRef.current);
@@ -34,10 +37,10 @@ export function LlmInput({
       return () => document.removeEventListener('keydown', handleKeyDown);
    }, []);
 
-   return <div className="flex">
+   return <div className="flex" ref={ref}>
       <div className="flex p-4 m-2 flex-row">
          <p className="text-sm text-gray-800 whitespace-pre">{text}</p>
-         <p className="text-sm text-gray-800 animate-pulse">|</p>
+         <p className={`text-sm text-gray-800 ${showCursor ? 'animate-pulse' : 'opacity-0'}`}>|</p>
       </div>
    </div>
 }
