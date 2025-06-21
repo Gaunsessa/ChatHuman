@@ -32,6 +32,7 @@ Example:
   * WHAT IS WRONG WITH YOU! ${ANGRY_TOKEN}
 
 After receive a correct answer, then call the ${HAPPY_TOKEN} tool at the end of you response.
+Make sure you use it.
 
 Example:
   * Thank you. ${HAPPY_TOKEN}
