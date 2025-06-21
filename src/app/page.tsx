@@ -112,7 +112,7 @@ Examples:
 // }
 
 return (
-  <div>
+  <div className="bg-white">
     {/*<button>{fetchData()}</button>*/}
     <TextBox />
   </div>
