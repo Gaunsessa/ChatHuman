@@ -97,7 +97,7 @@ export function Chat() {
             <Message key={index} message={message} />
          ))}
 
-         <LlmInput onSubmit={sendMessage} showCursor={!generating} ref={inputRef} />
+         <LlmInput onSubmit={sendMessage} showCursor={!generating} />
       </div>
    );
 }
