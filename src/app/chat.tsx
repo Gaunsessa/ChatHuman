@@ -89,8 +89,10 @@ export function Chat() {
          { role: 'assistant', content: data.choices[0].message.content }
       ]));
 
-      const lastMessage = messages.at(-1);
-      const uppecasePercent = (lastMessage?.content.match(/[A-Z]/g)?.length ?? 0) / (lastMessage?.content.length ?? 1) * 100;
+      const lastMessage = data.choices[0].message.content;
+      const uppecasePercent = (lastMessage?.match(/[A-Z]/g)?.length ?? 0) / (lastMessage?.length ?? 1) * 100;
+      console.log(uppecasePercent);
+
       if (uppecasePercent > 50)
          triggerShake(); 
 
