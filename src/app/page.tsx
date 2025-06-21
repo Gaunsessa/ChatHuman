@@ -1,3 +1,5 @@
+import { TextBox } from "./textBox";
+
 export default function Home() {
   async function fetchData() {
     'use server';
@@ -111,7 +113,8 @@ Examples:
 
 return (
   <div>
-    <button>{fetchData()}</button>
+    {/*<button>{fetchData()}</button>*/}
+    <TextBox />
   </div>
 );
 }
