@@ -83,7 +83,7 @@ export function Chat() {
       scrollToBottom();
    }, [messages]);
 
-   // 监听滚动是否接近底部，控制按钮显示
+   
    useEffect(() => {
       function handleScroll() {
          const threshold = 150;
