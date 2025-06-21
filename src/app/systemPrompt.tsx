@@ -33,6 +33,8 @@ Examples:
   * Solve this math problem: 2 + 2.
   * 
   After receive a correct answer, then ask another new question.
+
+CURRENT CONVERSATION:
 `;
 
 
