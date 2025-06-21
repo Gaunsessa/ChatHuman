@@ -32,10 +32,29 @@ export function Chat() {
 
    const inputRef = useRef(null);
    const bottomRef = useRef<HTMLDivElement>(null);
-
+   const chatWrapperRef = useRef<HTMLDivElement>(null);
    function scrollToBottom() {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
    }
+
+   const canShake = useRef(true); // allow only when not shaking
+
+function triggerShake() {
+  const el = chatWrapperRef.current;
+  if (!el || !canShake.current) return;
+
+  canShake.current = false; // lock it
+
+  el.classList.add("shake");
+
+  const handleAnimationEnd = () => {
+    el.classList.remove("shake");
+    canShake.current = true; // unlock after animation ends
+    el.removeEventListener("animationend", handleAnimationEnd);
+  };
+
+  el.addEventListener("animationend", handleAnimationEnd);
+}
 
    async function updateState() {
       if (generating) return;
@@ -66,28 +85,93 @@ export function Chat() {
          { role: 'assistant', content: data.choices[0].message.content }
       ]));
 
+      const lastMessage = messages.at(-1);
+      const uppecasePercent = (lastMessage?.content.match(/[A-Z]/g)?.length ?? 0) / (lastMessage?.content.length ?? 1) * 100;
+      
+      if (uppecasePercent > 50) {
+         triggerShake(); 
+      }
+
       setGenerating(false);
    }
 
    function sendMessage(text: string) {
-      if (generating) return false;
+  if (generating) return false;
 
-      setMessages(prev => [
-         ...prev,
-         { role: 'user', content: text }
-      ]);
+   // const hasLetter = /[a-zA-Z]/.test(text);
+   // const isYelling =
+   //  hasLetter  && (text === text.toUpperCase() && text.length > 5) ||
+   //  /!{2,}/.test(text) ||
+   //  /(IDIOT|DUMB|WHY|NOOB|STUPID|FUCK|SHIT|DAMN|BITCH)/i.test(text);
 
-      return true;
-   }
+   //    if (isYelling && chatWrapperRef.current) {
+   //       const el = chatWrapperRef.current;
+   // //    if (!el) return;
+
+   //    el.classList.remove("shake");   // 先移除，保证重触发
+   //    void el.offsetWidth;            // 触发浏览器重绘，强制重置动画
+   //    el.classList.add("shake");
+   //    setTimeout(() => el.classList.remove("shake"), 300);
+
+      // }
+
+  // （可选）播放愤怒音效
+  // new Audio("/angry.mp3").play();
+
+  setMessages(prev => [
+    ...prev,
+    { role: 'user', content: text }
+  ]);
+
+  return true;
+}
+
 
    useEffect(() => {
       if (messages.at(-1)?.role !== 'assistant') {
          updateState();
       }
 
+
       scrollToBottom();
    }, [messages]);
 
+   useEffect(() => {
+      const last = messages.at(-1);
+
+      if (last?.role === 'assistant') {
+         const angryWords = [
+            'ARE YOU STUPID',
+            'WHY WOULD YOU',
+            'WHAT THE HELL',
+            'I HATE',
+            'IDIOT',
+            'NOOB',
+            'YOU MORON',
+            'DUMB',
+            'USELESS',
+            'NOT WHAT I WANT',
+            'WRONG AGAIN',
+            'FUCK',
+            'DAMN',
+            'BITCH',
+            'I SAID',
+            'LISTEN',
+            'ARE YOU EVEN TRYING',
+            'EXCUSE ME',
+            'ANSWER MY QUESTION',
+            'THAT’S NOT AN ANSWER'
+         ];
+
+         const content = last.content.toUpperCase();
+         const isAngry = angryWords.some(word => content.includes(word));
+
+         if (isAngry && chatWrapperRef.current) {
+            chatWrapperRef.current.classList.add("shake");
+            setTimeout(() => chatWrapperRef.current?.classList.remove("shake"), 300);
+         }
+      }
+   }, [messages]);
    
    useEffect(() => {
       function handleScroll() {
@@ -102,7 +186,8 @@ export function Chat() {
    }, []);
 
    return (
-      <div className="flex-1 justify-end relative">
+  <div ref={chatWrapperRef} className="flex-1 justify-end relative">
+
          {messages.map((message, index) => (
             <Message key={index} message={message} />
          ))}
@@ -121,4 +206,4 @@ export function Chat() {
          )}
       </div>
    );
-}
+
