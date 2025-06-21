@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { UserText } from "./userText";
 
 import { SYSTEM_PROMPT } from "./systemPrompt";
+
 import { LlmText } from "./llmText";
+import { LlmInput } from "./llmInput";
 
 type message = {
    role: 'user' | 'assistant' | 'system';
@@ -53,16 +55,12 @@ export function Chat() {
       ]));
    }
 
-   function sendMessage() {
+   function sendMessage(text: string) {
       setMessages(prev => {
-         const value = (inputRef as any).current.value;
-
          const res = [
             ...prev,
-            { role: 'user', content: value }
+            { role: 'user', content: text }
          ];
-
-         // (inputRef as any).current.value = '';
 
          return res as any;
       });
@@ -79,8 +77,7 @@ export function Chat() {
          {messages.map((message: any, index: number) => (
             <Message key={index} message={message} />
          ))}
-         <input type="text" className="border-2" ref={inputRef} />
-         <button onClick={sendMessage}>Click</button>
+         <LlmInput onSubmit={sendMessage}/>
       </div>
    );
 }
