@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+// import ChatHuman from '../../public/Assets/ChatHuman.png';
 
 export const metadata: Metadata = {
   title: "ChatHuman",
