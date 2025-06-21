@@ -104,7 +104,7 @@ export function Chat() {
 
          <div ref={bottomRef}></div>
 
-         <LlmInput onSubmit={sendMessage} showCursor={!generating} ref={inputRef} />
+         <LlmInput onSubmit={sendMessage} showCursor={!generating} />
 
          {showScrollButton && (
             <button
