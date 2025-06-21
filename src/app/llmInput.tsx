@@ -35,10 +35,11 @@ export function LlmInput({
       return () => document.removeEventListener('keydown', handleKeyDown);
    }, []);
 
-   return <div className="flex">
-      <div className="flex p-4 m-2 flex-row">
-         <p className="text-sm text-gray-800 whitespace-pre">{text}</p>
-         <p className={`text-sm text-black ${showCursor ? 'animate-pulse' : 'opacity-0'}`}>|</p>
-      </div>
+   return <div className="flex m-6">
+      <p className="text-sm text-gray-800 whitespace-pre-wrap break-all">
+         {text}
+         <span className={`text-black ${showCursor ? 'animate-pulse' : 'opacity-0'}`}>|</span>
+      </p>
    </div>
+
 }
