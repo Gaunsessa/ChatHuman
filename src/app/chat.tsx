@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { UserText } from "./userText";
 
@@ -27,6 +27,7 @@ function Message({ message }: { message: message }) {
 
 export function Chat() {
    const [messages, setMessages] = useState([] as message[]);
+   const inputRef = useRef(null);
 
    async function updateState() {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -52,16 +53,34 @@ export function Chat() {
       ]));
    }
 
+   function sendMessage() {
+      setMessages(prev => {
+         const value = (inputRef as any).current.value;
+
+         const res = [
+            ...prev,
+            { role: 'user', content: value }
+         ];
+
+         // (inputRef as any).current.value = '';
+
+         return res as any;
+      });
+   }
+
    useEffect(() => {
-      updateState();
-   }, []);
+      if (messages.at(-1)?.role !== 'assistant')
+         updateState();
+
+   }, [messages]);
 
    return (
       <div className="flex-1 justify-end">
          {messages.map((message: any, index: number) => (
             <Message key={index} message={message} />
          ))}
-         <button onClick={updateState}>Click</button>
+         <input type="text" className="border-2" ref={inputRef} />
+         <button onClick={sendMessage}>Click</button>
       </div>
    );
 }
