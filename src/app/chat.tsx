@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { UserText } from "./userText";
-import { LlmText } from "./llmText";
+import { UserText, LlmText } from "./chatText";
 import { LlmInput } from "./llmInput";
 
 import { Message, requestCompletion } from "./llm";
