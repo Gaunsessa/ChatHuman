@@ -53,9 +53,17 @@ export function Chat() {
          ...prev,
          { role: 'assistant', content: data.choices[0].message.content }
       ]));
+
+      // // Scroll to the bottom of the chat
+      // if (inputRef.current) {
+      //    inputRef.current.scrollIntoView({ behavior: 'smooth' });
+      // }
    }
 
    function sendMessage(text: string) {
+      if (messages.at(-1)?.role === 'user')
+         return false;
+
       setMessages(prev => {
          const res = [
             ...prev,
@@ -64,6 +72,8 @@ export function Chat() {
 
          return res as any;
       });
+
+      return true;
    }
 
    useEffect(() => {
@@ -77,7 +87,7 @@ export function Chat() {
          {messages.map((message: any, index: number) => (
             <Message key={index} message={message} />
          ))}
-         <LlmInput onSubmit={sendMessage}/>
+         <LlmInput onSubmit={sendMessage} />
       </div>
    );
 }

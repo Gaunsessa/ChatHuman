@@ -4,7 +4,7 @@ import { LlmText } from "./llmText";
 export function LlmInput({
    onSubmit,
 }: {
-   onSubmit: (text: string) => void;
+   onSubmit: (text: string) => boolean;
 }) {
    const [text, setText] = useState('');
    const textRef = useRef(text);
@@ -21,8 +21,8 @@ export function LlmInput({
             console.log(textRef.current);
 
             if (textRef.current !== '') {
-               onSubmit(textRef.current);
-               setText('');
+               if (onSubmit(textRef.current))
+                  setText('');
             }
          } else if (event.key.length === 1) {
             setText(prev => prev + event.key);
@@ -34,5 +34,10 @@ export function LlmInput({
       return () => document.removeEventListener('keydown', handleKeyDown);
    }, []);
 
-   return <LlmText text={text} />;
+   return <div className="flex">
+      <div className="flex p-4 m-2 flex-row">
+         <p className="text-sm text-gray-800 whitespace-pre">{text}</p>
+         <p className="text-sm text-gray-800 animate-pulse">|</p>
+      </div>
+   </div>
 }
