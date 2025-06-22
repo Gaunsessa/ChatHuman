@@ -63,7 +63,7 @@ export async function streamCompletion(prompt: string): Promise<AsyncGenerator<s
                      if (content)
                         yield content;
 
-                  } catch (e) {}
+                  } catch (e) { }
                }
             }
          }
