@@ -9,7 +9,7 @@ export default function InfoButton() {
     <>
     <button 
       onClick={() => setOpen(true)}
-      className="w-14 h-14 rounded-2xl bg-[#e9e9e9] font-extrabold text-xl text-gray-300 flex items-center justify-center hover:bg-[#cbcbcb] hover:text-gray-500 hover:cursor-pointer transition"
+      className="w-14 h-14 rounded-xl bg-[#e9e9e9] font-extrabold text-2xl text-gray-300 flex items-center justify-center hover:bg-[#cbcbcb] hover:text-gray-500 hover:cursor-pointer transition"
     >
       ?
     </button>
