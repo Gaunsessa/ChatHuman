@@ -67,8 +67,8 @@ export default function Home() {
         <Chat racer={racer} happyAction={happyAction} angryAction={angryAction} />
       </div>
 
-      <div className="fixed bottom-10 left-10">
-        <div className="space-x-2 absolute left-2 bottom-2">
+      <div className="fixed bottom-4 left-4">
+        <div>
           <p className="flex h-14 w-40 bg-[#e9e9e9] text-gray-300 rounded-xl p-4 items-center justify-center font-bold hover:text-gray-500 hover:bg-[#cbcbcb] transition">Assist Mode:
             <input
               type="checkbox"
