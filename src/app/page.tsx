@@ -86,7 +86,7 @@ export default function Home() {
   }
 
   const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
-
+  
   return (
     <div className="relative w-full min-h-screen overflow-hidden">
       <div
@@ -107,7 +107,7 @@ export default function Home() {
           </div>
           <Chat racer={racer} happyAction={happyAction} angryAction={angryAction} />
       
-          <div className="fixed bottom-10 left-10">
+          <div className="fixed bottom-2 left-2">
             <div className="space-x-2 absolute left-2 bottom-2">
               <p className="flex h-14 w-40 bg-[#e9e9e9] text-gray-300 rounded-xl p-4 items-center justify-center font-bold hover:text-gray-500 hover:bg-[#cbcbcb] transition">Assist Mode:
                 <input
@@ -131,6 +131,5 @@ export default function Home() {
         )}
       </div>
     </div>
-
   );
 }

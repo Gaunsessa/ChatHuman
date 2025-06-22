@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';  // Next.js 13+ 的路由hook
+import { useRouter } from 'next/navigation';
 
 export default function Custom404() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -49,7 +49,6 @@ export default function Custom404() {
     function loop() {
       ctx.clearRect(0, 0, width, height);
 
-      // Dino physics
       dinoVy += gravity;
       dinoY += dinoVy;
       if (dinoY > height - 40) {
@@ -58,21 +57,18 @@ export default function Custom404() {
         isJumping = false;
       }
 
-      // Move obstacle
       obstacleX -= 6;
       if (obstacleX < -20) {
         obstacleX = width;
         setScore(prev => prev + 1);
       }
 
-      // Draw everything
       drawDino();
       drawObstacle();
 
-      // Collision detection
       if (
-        obstacleX < 80 && obstacleX > 50 && // horizontally near dino
-        dinoY + 30 > height - 40 // vertically touching
+        obstacleX < 80 && obstacleX > 50 &&
+        dinoY + 30 > height - 40
       ) {
         setGameOver(true);
         return;
@@ -105,7 +101,7 @@ export default function Custom404() {
   }, [gameOver]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen  text-black">
       <h1 className="text-4xl mb-4">404 - Oops! GPT's rage exploded!</h1>
       <p className="mb-4">You made GPT so mad it kicked you out. Press Space to jump and avoid the red obstacle!</p>
       <canvas
@@ -119,7 +115,7 @@ export default function Custom404() {
       {gameOver && <p className="text-red-500 mt-2">Game Over! Press Space to restart.</p>}
 
       <button
-        onClick={() => router.push('/')} // 跳转回首页或你的 ChatHuman 页面路由
+        onClick={() => router.push('/')}
         className="mt-8 px-6 py-3 bg-red-600 hover:bg-red-700 rounded text-white font-bold transition"
       >
         Return to ChatHuman
