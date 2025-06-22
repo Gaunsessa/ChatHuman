@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Chat } from "./chat";
 import InfoButton from "@/components/infoButton";
 
@@ -10,15 +9,12 @@ export default function Home() {
   const [showEnd, setShowEnd] = useState(false);
 
   const [racer, setRacer] = useState(false);
-  const [hasRedirected, setHasRedirected] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const canAnimate = useRef(true);
-  const maxAnger = 1;
-
-  const router = useRouter();
+  const maxAnger = 2;
 
   function triggerAnimation(name: string) {
     const el = wrapperRef.current;
@@ -49,20 +45,20 @@ export default function Home() {
 
   function angryAction() {
     setWrongCount((prev) => {
-      const updated = prev + 1;
+      let updated = prev + 1;
 
       const memes = ["Angry meme.mp3"];
 
       const selectedMeme = memes[Math.floor(Math.random() * memes.length)];
       new Audio(selectedMeme).play();
 
-      if (updated >= maxAnger) {
+      if (updated % 4 == 0) {
         setShowEnd(true);
 
         setTimeout(() => setShowEnd(false), 4000);
       }
 
-      return updated;
+      return Math.max(updated, maxAnger);
     });
 
     triggerAnimation("shake");
