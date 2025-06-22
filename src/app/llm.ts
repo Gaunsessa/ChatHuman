@@ -11,7 +11,7 @@ export type Message = {
    angry?: boolean;
 };
 
-export async function requestCompletion(messages: Message[]): Promise<Message[]> {
+export async function streamCompletion(prompt: string): Promise<AsyncGenerator<string>> {
    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -22,15 +22,63 @@ export async function requestCompletion(messages: Message[]): Promise<Message[]>
          model: 'google/gemini-2.0-flash-001',
          messages: [{ 
             role: 'system', 
-            content: SYSTEM_PROMPT + messages.map(m => {
-               return `${m.role === 'user' ? 'Assistant' : 'You'}: ${m.content}`;
-            }).join('\n')
+            content: prompt,
          }],
+         stream: true,
       }),
    });
 
-   let data = await response.json();
-   data = data.choices[0].message.content;
+   const reader = response.body?.getReader();
+
+   return (async function* () {
+      if (!reader)
+         return '';
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+      try {
+         while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            buffer += decoder.decode(value, { stream: true });
+
+            while (true) {
+               const lineEnd = buffer.indexOf('\n');
+               if (lineEnd === -1) break;
+
+               const line = buffer.slice(0, lineEnd).trim();
+
+               buffer = buffer.slice(lineEnd + 1);
+
+               if (line.startsWith('data: ')) {
+                  const data = line.slice(6);
+
+                  if (data === '[DONE]') break;
+
+                  try {
+                     const parsed = JSON.parse(data);
+                     const content = parsed.choices[0].delta.content;
+
+                     if (content)
+                        yield content;
+
+                  } catch (e) { }
+               }
+            }
+         }
+      } finally {
+         reader.cancel();
+      }
+   })();
+}
+
+export async function requestCompletion(messages: Message[]): Promise<Message[]> {
+   let data: any = await streamCompletion(SYSTEM_PROMPT + messages.map(m => {
+      return `${m.role === 'user' ? 'Assistant' : 'You'}: ${m.content}`;
+   }).join('\n'));
+
+   data = (await Array.fromAsync(data)).join('');
 
    return [
       ...messages,

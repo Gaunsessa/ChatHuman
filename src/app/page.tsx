@@ -6,6 +6,7 @@ import { Chat } from './chat';
 
 export default function Home() {
   const [wrongCount, setWrongCount] = useState(0);
+  const [racer, setRacer] = useState(false);
   const [showExplosion, setShowExplosion] = useState(false);
   const [hasRedirected, setHasRedirected] = useState(false);
 
@@ -15,7 +16,7 @@ export default function Home() {
 
   const router = useRouter();
 
-  function shakeAction() {
+  function angryAction() {
     setWrongCount(prev => {
       const updated = prev + 1;
       const memes = ['Angry meme.mp3'];
@@ -53,7 +54,7 @@ export default function Home() {
     el.addEventListener("animationend", handleAnimationEnd);
   }
 
-  function acceptAction() {
+  function happyAction() {
     setWrongCount(prev => {
       const decreased = prev - 1;
       return decreased < 0 ? 0 : decreased;
@@ -104,14 +105,21 @@ export default function Home() {
   >
     <div className="max-w-4xl m-2">
       <div className="flex justify-center items-center">
-        <img
-          src="/Assets/ChatHumanFull.png"
-          alt="ChatHuman"
-          className="p-5 object-center"
-          style={{ imageRendering: "pixelated" } as any}
-        />
+        <img src="/Assets/ChatHumanTitle.gif" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
       </div>
-      <Chat happyAction={acceptAction} angryAction={shakeAction} />
+      <Chat racer={racer} happyAction={happyAction} angryAction={angryAction} />
+      
+      <div className="fixed bottom-10 left-10">
+        <div className="space-x-2 absolute left-2 bottom-2">
+          <p className="flex h-14 w-40 bg-[#e9e9e9] text-gray-300 rounded-xl p-4 items-center justify-center font-bold hover:text-gray-500 hover:bg-[#cbcbcb] transition">Assist Mode:
+            <input
+              type="checkbox"
+              onChange={() => setRacer(prev => !prev)}
+              className="ml-1 w-4 h-4 appearance-none bg-[#d8d8d8] rounded checked:bg-[#898989]"
+            />
+          </p>
+        </div>
+      </div>
     </div>
 
     {showExplosion && (
