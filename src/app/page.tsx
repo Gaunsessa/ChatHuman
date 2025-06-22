@@ -137,7 +137,7 @@ export default function Home() {
         )}
       </div>
 
-      <input type="text" ref={inputRef}/>
+      <input type="text" className='text-transparent border-0' ref={inputRef}/>
     </div>
   );
 }

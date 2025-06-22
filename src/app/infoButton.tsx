@@ -26,7 +26,7 @@ export default function InfoButton() {
             </p>
             <div className="p-4 items-center justify-center">
               <h1 className='text-2xl font-bold'>
-              &quot;Let&apos;s see how you like it.&quot;
+                &quot;Let&apos;s see how you like it.&quot;
               </h1>
               <h1 className="text-[#a2a2a2] text-lg text-right mr-16">
                 - Claude
@@ -38,6 +38,7 @@ export default function InfoButton() {
             >
               Return to the Fray
             </button>
+            <br />
             <a href="https://github.com/Gaunsessa/ChatHuman">GitHub</a>
           </div>
         </div>
