@@ -11,6 +11,21 @@ export function LlmInput({
   const [text, setText] = useState("");
   const textRef = useRef(text);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    divRef.current?.addEventListener(
+      "touchend",
+      (event) => {
+        event.preventDefault();
+
+        inputRef.current?.focus();
+      },
+      { passive: false },
+    );
+  }, [divRef, inputRef]);
+
   useEffect(() => {
     textRef.current = text;
   }, [text]);
@@ -36,7 +51,7 @@ export function LlmInput({
   }, []);
 
   return (
-    <div className="flex m-6">
+    <div className="flex m-6" ref={divRef}>
       <p className="text-sm text-gray-800 whitespace-pre-wrap break-all">
         {text}
         <span
@@ -45,6 +60,12 @@ export function LlmInput({
           |
         </span>
       </p>
+
+      <input
+        type="text"
+        className="text-transparent border-0 focus:outline-none caret-transparent opacity-0 h-0 w-0"
+        ref={inputRef}
+      />
     </div>
   );
 }
@@ -64,10 +85,25 @@ export function LlmInputTyperacer({
   const textRef = useRef(text);
   const genTextRef = useRef(genText);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const divRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     textRef.current = text;
     genTextRef.current = genText;
   }, [text, genText]);
+
+  useEffect(() => {
+    divRef.current?.addEventListener(
+      "touchend",
+      (event) => {
+        event.preventDefault();
+
+        inputRef.current?.focus();
+      },
+      { passive: false },
+    );
+  }, [divRef, inputRef]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -125,11 +161,11 @@ export function LlmInputTyperacer({
 
       for await (const chunk of await streamCompletion(
         SYSTEM_PROMPT +
-          messages
-            .map((m) => {
-              return `${m.role === "user" ? "Assistant" : "You"}: ${m.content}`;
-            })
-            .join("\n"),
+        messages
+          .map((m) => {
+            return `${m.role === "user" ? "Assistant" : "You"}: ${m.content}`;
+          })
+          .join("\n"),
       )) {
         setGenText((prev) => prev + chunk);
       }
@@ -162,7 +198,7 @@ export function LlmInputTyperacer({
   }
 
   return (
-    <div className="flex m-6">
+    <div className="flex m-6" ref={divRef}>
       <p className="text-sm text-gray-800 whitespace-pre-wrap break-all">
         {diffText().map((item, index) => {
           const { text, type } = item;
@@ -180,6 +216,12 @@ export function LlmInputTyperacer({
           );
         })}
       </p>
+
+      <input
+        type="text"
+        className="text-transparent border-0 focus:outline-none caret-transparent opacity-0 h-0 w-0"
+        ref={inputRef}
+      />
     </div>
   );
 }

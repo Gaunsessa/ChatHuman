@@ -80,15 +80,15 @@ export default function Home() {
   }
 
   useEffect(() => {
-    document.addEventListener(
-      "touchend",
-      (event) => {
-        event.preventDefault();
+    // document.addEventListener(
+    //   "touchend",
+    //   (event) => {
+    //     event.preventDefault();
 
-        inputRef.current?.focus();
-      },
-      { passive: false },
-    );
+    //     inputRef.current?.focus();
+    //   },
+    //   { passive: false },
+    // );
   }, []);
 
   const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
@@ -130,12 +130,6 @@ export default function Home() {
           />
         </p>
       </div>
-
-      <input
-        type="text"
-        className="text-transparent border-0 focus:outline-none"
-        ref={inputRef}
-      />
 
       <div className="fixed bottom-4 right-4">
         <InfoButton />
