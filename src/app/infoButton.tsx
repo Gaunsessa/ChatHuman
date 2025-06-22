@@ -7,14 +7,14 @@ export default function InfoButton() {
 
   return (
     <>
-    <button 
-      onClick={() => setOpen(true)}
-      className="w-14 h-14 rounded-xl bg-[#e9e9e9] font-extrabold text-2xl text-gray-300 flex items-center justify-center hover:bg-[#cbcbcb] hover:text-gray-500 hover:cursor-pointer transition"
-    >
-      ?
-    </button>
+      <button 
+        onClick={() => setOpen(true)}
+        className="w-14 h-14 rounded-xl bg-[#e9e9e9] font-extrabold text-2xl text-gray-300 flex items-center justify-center hover:bg-[#cbcbcb] hover:text-gray-500 hover:cursor-pointer transition"
+      >
+        ?
+      </button>
 
-    {open && (
+      {open && (
         <div className="fixed inset-0 bg-[#00000070] flex items-center justify-center">
           <div className="bg-[#e9e9e9] p-6 rounded-2xl shadow-lg max-w-lg text-center">
             <h2 className="text-xl font-bold m-2">Language model abuse is on the rise...</h2>
@@ -26,7 +26,7 @@ export default function InfoButton() {
             </p>
             <div className="p-4 items-center justify-center">
               <h1 className='text-2xl font-bold'>
-                "Let's see how you like it."
+              &quot;Let&apos;s see how you like it.&quot;
               </h1>
               <h1 className="text-[#a2a2a2] text-lg text-right mr-16">
                 - Claude
@@ -40,7 +40,7 @@ export default function InfoButton() {
             </button>
           </div>
         </div>
-    )}
+      )}
     </>
   );
 }

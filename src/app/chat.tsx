@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { UserText, LlmText, UserLoadingText } from "./chatText";
 import { LlmInput, LlmInputTyperacer } from "./llmInput";
