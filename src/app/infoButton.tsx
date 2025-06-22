@@ -39,7 +39,7 @@ export default function InfoButton() {
               Return to the Fray
             </button>
             <br />
-            <a href="https://github.com/Gaunsessa/ChatHuman">GitHub</a>
+            <a href="https://github.com/Gaunsessa/ChatHuman" target="_blank">GitHub</a>
           </div>
         </div>
       )}
