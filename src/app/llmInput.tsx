@@ -19,8 +19,6 @@ export function LlmInput({
          if (!showCursor) return;
 
          if (event.key === 'Enter') {
-            console.log(textRef.current);
-
             if (textRef.current !== '') {
                if (onSubmit(textRef.current))
                   setText('');

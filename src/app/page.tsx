@@ -11,7 +11,7 @@ export default function Home() {
 
   const canShake = useRef(true);
 
-  function shakeAction() {
+  function angryAction() {
     setWrongCount(prev => {
         const updated = prev + 1;
 
@@ -40,7 +40,7 @@ export default function Home() {
     el.addEventListener("animationend", handleAnimationEnd);
   }
 
-  function acceptAction() {
+  function happyAction() {
     const el = wrapperRef.current;
     if (!el || !canShake.current) return;
 
@@ -59,11 +59,11 @@ export default function Home() {
 
   return (
     <div className='flex flex-1 justify-center' ref={wrapperRef}>
-      <div className="max-w-4xl m-2">
+      <div className="min-w-4xl max-w-4xl m-2">
         <div className='flex flex-1 justify-center align-center items-center'>
           <img src="/Assets/ChatHumanFull.png" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
         </div>
-        <Chat happyAction={acceptAction} angryAction={shakeAction}/>
+        <Chat happyAction={happyAction} angryAction={angryAction}/>
       </div>
 
       {showExplosion && (

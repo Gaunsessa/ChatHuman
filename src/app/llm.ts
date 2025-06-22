@@ -32,6 +32,8 @@ export async function requestCompletion(messages: Message[]): Promise<Message[]>
    let data = await response.json();
    data = data.choices[0].message.content;
 
+   console.log(data);
+
    return [
       ...messages,
       { 

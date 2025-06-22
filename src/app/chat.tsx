@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { UserText, LlmText } from "./chatText";
+import { UserText, LlmText, UserLoadingText } from "./chatText";
 import { LlmInput } from "./llmInput";
 
 import { Message, requestCompletion } from "./llm";
@@ -91,6 +91,8 @@ export function Chat({ angryAction, happyAction }: { angryAction: () => void, ha
          {messages.map((message, index) => (
             <MessageBox key={index} message={message} />
          ))}
+
+         { generating && (<UserLoadingText/>) }
 
          <LlmInput onSubmit={sendMessage} showCursor={!generating} />
 
