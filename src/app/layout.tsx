@@ -17,7 +17,7 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="light only" />
       </head>
-      <body className="min-h-[100vh] bg-white">
+      <body className="min-h-[100vh] bg-white" style={{ backgroundColor: "white" }}>
         <div className="fixed bottom-4 right-4 z-50">
           <InfoButton /> 
         </div>
