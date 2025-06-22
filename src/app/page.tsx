@@ -60,7 +60,7 @@ export default function Home() {
 
   return (
     <div className='flex flex-1 justify-center min-h-[100vh] relative' ref={wrapperRef}>
-      <div className="min-w-4xl max-w-4xl m-2">
+      <div className="w-full max-w-4xl m-2">
         <div className='flex flex-1 justify-center align-center items-center'>
           <img src="/Assets/ChatHumanTitle.gif" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
         </div>
