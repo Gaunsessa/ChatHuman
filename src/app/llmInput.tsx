@@ -16,11 +16,12 @@ export function LlmInput({
 
    useEffect(() => {
       function handleKeyDown(event: KeyboardEvent) {
+         if ([' ', '\''].includes(event.key))
+            event.preventDefault();
+
          if (!showCursor) return;
 
          if (event.key === 'Enter') {
-            console.log(textRef.current);
-
             if (textRef.current !== '') {
                if (onSubmit(textRef.current))
                   setText('');
@@ -41,5 +42,4 @@ export function LlmInput({
          <span className={`text-black ${showCursor ? 'animate-pulse' : 'opacity-0'}`}>|</span>
       </p>
    </div>
-
 }
