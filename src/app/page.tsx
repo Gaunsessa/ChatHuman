@@ -88,7 +88,9 @@ export default function Home() {
   }
 
   useEffect(() => {
-    inputRef.current?.focus();
+    document.addEventListener('touchend', (event) => {
+      inputRef.current?.focus();
+    });
   }, []);
 
   const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
