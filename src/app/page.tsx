@@ -89,8 +89,10 @@ export default function Home() {
 
   useEffect(() => {
     document.addEventListener('touchend', (event) => {
+      event.preventDefault();
+
       inputRef.current?.focus();
-    });
+    }, { passive: false });
   }, []);
 
   const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
@@ -139,7 +141,7 @@ export default function Home() {
         )}
       </div>
 
-      <input type="text" className='text-transparent border-0' ref={inputRef}/>
+      <input type="text" className='text-transparent border-0' ref={inputRef} />
     </div>
   );
 }
