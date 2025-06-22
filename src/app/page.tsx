@@ -1,34 +1,47 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Chat } from './chat';
 
 export default function Home() {
-  const [wrongCount, setWrongCount] = useState(1);
+  const [wrongCount, setWrongCount] = useState(0);
   const [showExplosion, setShowExplosion] = useState(false);
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-
   const canShake = useRef(true);
+  const maxAnger = 6;
+
+  const router = useRouter();
 
   function shakeAction() {
     setWrongCount(prev => {
-        const updated = prev + 1;
+      const updated = prev + 1;
+      const memes = ['Angry meme.mp3'];
+      const selectedMeme = memes[Math.floor(Math.random() * memes.length)];
+      new Audio(selectedMeme).play();
 
-        if (updated % 4 == 0) {
-          setShowExplosion(true);
-          setTimeout(() => setShowExplosion(false), 4000);
-          return 0;
-        }
+      if (updated >= maxAnger) {
+        setShowExplosion(true);
 
-        return updated;
+        setTimeout(() => {
+          setShowExplosion(false);
+          if (!hasRedirected) {
+            setHasRedirected(true);
+            router.push('/not-found');
+          }
+        }, 4000);
+
+        return 0;
+      }
+      return updated;
     });
 
     const el = wrapperRef.current;
     if (!el || !canShake.current) return;
 
     canShake.current = false;
-
     el.classList.add("shake");
 
     const handleAnimationEnd = () => {
@@ -41,10 +54,23 @@ export default function Home() {
   }
 
   function acceptAction() {
+    setWrongCount(prev => {
+      const decreased = prev - 1;
+      return decreased < 0 ? 0 : decreased;
+    });
+
     const el = wrapperRef.current;
     if (!el || !canShake.current) return;
 
     canShake.current = false;
+
+    const sounds = [
+      'Oh my god! Wow! - Meme (mp3cut.net).mp3',
+      'Oh my god!.mp3',
+      'Yippee Sound Effect.mp3'
+    ];
+    const selectedSound = sounds[Math.floor(Math.random() * sounds.length)];
+    new Audio(selectedSound).play();
 
     el.classList.add("accept");
 
@@ -57,24 +83,48 @@ export default function Home() {
     el.addEventListener("animationend", handleAnimationEnd);
   }
 
-  return (
-    <div className='flex flex-1 justify-center' ref={wrapperRef}>
-      <div className="max-w-4xl m-2">
-        <div className='flex flex-1 justify-center align-center items-center'>
-          <img src="/Assets/ChatHumanFull.png" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
-        </div>
-        <Chat happyAction={acceptAction} angryAction={shakeAction}/>
-      </div>
+  // 设置全屏红色背景的透明度（最大0.5）
+  const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
 
-      {showExplosion && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
-               <img
-                  src="/trump.gif"
-                  alt="Explosion"
-                  className="w-140 h-auto rounded-xl shadow-2xl"
-               />
-            </div>
-         )}
+  return (
+    <div className="relative w-full min-h-screen overflow-hidden">
+  {/* 从底部上涨的红色愤怒背景条 */}
+  <div
+    className="fixed bottom-0 left-0 w-full z-0 transition-all duration-500 ease-out pointer-events-none"
+    style={{
+      height: `${(wrongCount / maxAnger) * 100}vh`,
+      background: 'linear-gradient(to top, rgba(255, 66, 66, 0.2), transparent)'
+    }}
+  />
+
+  {/* 内容层 */}
+  <div
+    className="relative flex flex-col items-center justify-center min-h-screen z-10"
+    ref={wrapperRef}
+  >
+    <div className="max-w-4xl m-2">
+      <div className="flex justify-center items-center">
+        <img
+          src="/Assets/ChatHumanFull.png"
+          alt="ChatHuman"
+          className="p-5 object-center"
+          style={{ imageRendering: "pixelated" } as any}
+        />
+      </div>
+      <Chat happyAction={acceptAction} angryAction={shakeAction} />
     </div>
+
+    {showExplosion && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+        <img
+          src="/trump.gif"
+          alt="Explosion"
+          className="w-140 h-auto rounded-xl shadow-2xl"
+        />
+      </div>
+    )}
+  </div>
+</div>
+
   );
 }
