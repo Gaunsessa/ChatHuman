@@ -16,6 +16,9 @@ export function LlmInput({
 
    useEffect(() => {
       function handleKeyDown(event: KeyboardEvent) {
+         if ([' ', '\''].includes(event.key))
+            event.preventDefault();
+
          if (!showCursor) return;
 
          if (event.key === 'Enter') {

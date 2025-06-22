@@ -13,15 +13,15 @@ export default function Home() {
 
   function angryAction() {
     setWrongCount(prev => {
-        const updated = prev + 1;
+      const updated = prev + 1;
 
-        if (updated % 4 == 0) {
-          setShowExplosion(true);
-          setTimeout(() => setShowExplosion(false), 4000);
-          return 0;
-        }
+      if (updated % 4 == 0) {
+        setShowExplosion(true);
+        setTimeout(() => setShowExplosion(false), 4000);
+        return 0;
+      }
 
-        return updated;
+      return updated;
     });
 
     const el = wrapperRef.current;
@@ -63,18 +63,18 @@ export default function Home() {
         <div className='flex flex-1 justify-center align-center items-center'>
           <img src="/Assets/ChatHumanFull.png" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
         </div>
-        <Chat happyAction={happyAction} angryAction={angryAction}/>
+        <Chat happyAction={happyAction} angryAction={angryAction} />
       </div>
 
       {showExplosion && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
-               <img
-                  src="/trump.gif"
-                  alt="Explosion"
-                  className="w-140 h-auto rounded-xl shadow-2xl"
-               />
-            </div>
-         )}
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50">
+          <img
+            src="/trump.gif"
+            alt="Explosion"
+            className="w-140 h-auto rounded-xl shadow-2xl"
+          />
+        </div>
+      )}
     </div>
   );
 }
