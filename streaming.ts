@@ -26,29 +26,34 @@ Examples:
 `;
 
 (async () => {
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer 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`,
-      'Content-Type': 'application/json',
+  const response = await fetch(
+    "https://openrouter.ai/api/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer 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`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-2.0-flash-001",
+        messages: [
+          {
+            role: "system",
+            content: SYSTEM_PROMPT,
+          },
+        ],
+        stream: true,
+      }),
     },
-    body: JSON.stringify({
-      model: 'google/gemini-2.0-flash-001',
-      messages: [{ 
-        role: 'system', 
-        content: SYSTEM_PROMPT 
-      }],
-      stream: true,
-    }),
-  });
+  );
 
   const reader = response.body?.getReader();
   if (!reader) {
-    throw new Error('Response body is not readable');
+    throw new Error("Response body is not readable");
   }
 
   const decoder = new TextDecoder();
-  let buffer = '';
+  let buffer = "";
 
   try {
     while (true) {
@@ -60,15 +65,15 @@ Examples:
 
       // Process complete lines from buffer
       while (true) {
-        const lineEnd = buffer.indexOf('\n');
+        const lineEnd = buffer.indexOf("\n");
         if (lineEnd === -1) break;
 
         const line = buffer.slice(0, lineEnd).trim();
         buffer = buffer.slice(lineEnd + 1);
 
-        if (line.startsWith('data: ')) {
+        if (line.startsWith("data: ")) {
           const data = line.slice(6);
-          if (data === '[DONE]') break;
+          if (data === "[DONE]") break;
 
           try {
             const parsed = JSON.parse(data);

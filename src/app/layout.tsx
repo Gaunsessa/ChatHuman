@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import InfoButton from "./infoButton";
+
+import type { Metadata } from "next";
+import InfoButton from "@/components/infoButton";
 
 export const metadata: Metadata = {
   title: "ChatHuman",
@@ -17,10 +18,10 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="light only" />
       </head>
-      <body className="min-h-[100vh] bg-white" style={{ backgroundColor: "white" }}>
-        <div className="fixed bottom-4 right-4 z-50">
-          <InfoButton /> 
-        </div>
+      <body
+        className="min-h-[100vh] bg-white"
+        style={{ backgroundColor: "white" }}
+      >
         {children}
       </body>
     </html>

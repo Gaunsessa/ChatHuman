@@ -58,5 +58,4 @@ NEVER WRITE 'You: '. There is no need to prefix your messages with 'You: ' or 'A
 CURRENT CONVERSATION:
 `;
 
-
 export { SYSTEM_PROMPT, HAPPY_TOKEN, ANGRY_TOKEN };
