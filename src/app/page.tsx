@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Chat } from './chat';
 
@@ -11,6 +11,8 @@ export default function Home() {
   const [hasRedirected, setHasRedirected] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const canShake = useRef(true);
   const maxAnger = 6;
 
@@ -85,6 +87,10 @@ export default function Home() {
     el.addEventListener("animationend", handleAnimationEnd);
   }
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   const backgroundOverlayOpacity = Math.min(wrongCount / maxAnger, 0.5);
   
   return (
@@ -130,6 +136,8 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      <input type="text" className='hidden' ref={inputRef}/>
     </div>
   );
 }
