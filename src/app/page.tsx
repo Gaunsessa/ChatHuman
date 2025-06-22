@@ -67,13 +67,17 @@ export default function Home() {
         <Chat racer={racer} happyAction={happyAction} angryAction={angryAction} />
       </div>
 
-      <div className="flex items-center space-x-2 absolute left-2 bottom-2">
-        <p>Assist Mode:</p>
-        <input
-          type="checkbox"
-          onChange={() => setRacer(prev => !prev)}
-          className="w-4 h-4"
-        />
+      <div className="fixed bottom-10 left-10">
+        <div className="space-x-2 absolute left-2 bottom-2">
+          <p className="flex h-14 w-40 bg-[#e9e9e9] text-gray-300 rounded-xl p-4 items-center justify-center font-bold hover:text-gray-500 hover:bg-[#cbcbcb] transition">Assist Mode:
+            <input
+              type="checkbox"
+              onChange={() => setRacer(prev => !prev)}
+              className="ml-1 w-4 h-4 appearance-none bg-[#d8d8d8] rounded checked:bg-[#898989]"
+            />
+          </p>
+        </div>
+        
       </div>
 
       {showExplosion && (
