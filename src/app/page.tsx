@@ -11,7 +11,6 @@ export default function Home() {
   const [racer, setRacer] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const canAnimate = useRef(true);
   const maxAnger = 6;
