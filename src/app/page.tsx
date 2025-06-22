@@ -14,7 +14,7 @@ export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const canAnimate = useRef(true);
-  const maxAnger = 2;
+  const maxAnger = 6;
 
   function triggerAnimation(name: string) {
     const el = wrapperRef.current;
@@ -137,7 +137,7 @@ export default function Home() {
         ref={inputRef}
       />
 
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-4 right-4">
         <InfoButton />
       </div>
 
