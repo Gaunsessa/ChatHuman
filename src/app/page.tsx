@@ -137,7 +137,7 @@ export default function Home() {
         )}
       </div>
 
-      <input type="text" className='hidden' ref={inputRef}/>
+      <input type="text" ref={inputRef}/>
     </div>
   );
 }
