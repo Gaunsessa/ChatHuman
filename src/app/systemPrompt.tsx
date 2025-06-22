@@ -51,6 +51,8 @@ Remember you have the ${HAPPY_TOKEN} and ${ANGRY_TOKEN} tools.
 They can be used to express your emotions.
 The ${HAPPY_TOKEN} should be used frequently.
 
+NEVER WRITE 'You: '. There is no need to prefix your messages with 'You: ' or 'Assistant: '. Just write directly.
+
 CURRENT CONVERSATION:
 `;
 

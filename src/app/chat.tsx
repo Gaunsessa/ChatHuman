@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { UserText, LlmText, UserLoadingText } from "./chatText";
-import { LlmInput } from "./llmInput";
+import { LlmInput, LlmInputTyperacer } from "./llmInput";
 
 import { Message, requestCompletion } from "./llm";
 
@@ -20,7 +20,7 @@ function MessageBox({ message }: { message: Message }) {
    }
 }
 
-export function Chat({ angryAction, happyAction }: { angryAction: () => void, happyAction: () => void }) {
+export function Chat({ racer, angryAction, happyAction }: { racer: boolean, angryAction: () => void, happyAction: () => void }) {
    const [generating, setGenerating] = useState(false);
    const [messages, setMessages] = useState([] as Message[]);
 
@@ -92,9 +92,11 @@ export function Chat({ angryAction, happyAction }: { angryAction: () => void, ha
             <MessageBox key={index} message={message} />
          ))}
 
-         { generating && (<UserLoadingText/>) }
+         {generating && (<UserLoadingText />)}
 
-         <LlmInput onSubmit={sendMessage} showCursor={!generating} />
+         {racer && (<LlmInputTyperacer onSubmit={sendMessage} showCursor={!generating} messages={messages} />)}
+
+         {!racer && (<LlmInput onSubmit={sendMessage} showCursor={!generating} />)}
 
          {showScrollButton && (
             <button

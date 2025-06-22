@@ -5,6 +5,7 @@ import { Chat } from './chat';
 
 export default function Home() {
   const [wrongCount, setWrongCount] = useState(1);
+  const [racer, setRacer] = useState(false);
   const [showExplosion, setShowExplosion] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -63,7 +64,16 @@ export default function Home() {
         <div className='flex flex-1 justify-center align-center items-center'>
           <img src="/Assets/ChatHumanFull.png" alt="" className="p-5 object-centre" style={{ imageRendering: "pixelated" } as any} />
         </div>
-        <Chat happyAction={happyAction} angryAction={angryAction} />
+        <Chat racer={racer} happyAction={happyAction} angryAction={angryAction} />
+      </div>
+
+      <div className="flex items-center space-x-2 absolute left-2 bottom-2">
+        <p>Assist Mode:</p>
+        <input
+          type="checkbox"
+          onChange={() => setRacer(prev => !prev)}
+          className="w-4 h-4"
+        />
       </div>
 
       {showExplosion && (
