@@ -14,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-[100vh]">
+      <head>
+        <meta name="color-scheme" content="light only" />
+      </head>
+      <body className="min-h-[100vh] bg-white">
         <div className="fixed bottom-4 right-4 z-50">
           <InfoButton /> 
         </div>
